@@ -2,6 +2,363 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>智善康厨 - 智能烹饪小程序</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Microsoft YaHei', sans-serif; min-height: 100vh; overflow-x: hidden; }
+        .page { display: none; min-height: 100vh; padding: 40px 20px; animation: fadeIn 0.5s ease; }
+        .page.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            margin: 10px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4); }
+        .btn.back { background: linear-gradient(135deg, #666, #444); }
+        
+        #home-page {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            position: relative;
+            padding-top: 0;
+        }
+        #home-page.active {
+            display: block;
+            min-height: 100vh;
+        }
+        .poster-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .poster-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .hotspot-btn {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .hotspot-btn:hover {
+            background: rgba(255,255,255,0.2) !important;
+        }
+        .hotspot-btn.scan {
+            top: 37%;
+            left: 1%;
+            width: 30%;
+            height: 8%;
+            background: rgba(0, 212, 255, 0);
+        }
+        .hotspot-btn.cook {
+            top: 46%;
+            left: 1%;
+            width: 30%;
+            height: 8%;
+            background: rgba(255, 107, 107, 0);
+        }
+        .hotspot-btn.delivery {
+            top: 55%;
+            left: 1%;
+            width: 30%;
+            height: 8%;
+            background: rgba(78, 205, 196, 0);
+        }
+        .hotspot-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+        .hotspot-btn.cook::after { background: rgba(255, 107, 107, 0.8); }
+        .hotspot-btn.delivery::after { background: rgba(78, 205, 196, 0.8); }
+        .hotspot-btn:hover::after {
+            transform: translateY(-50%) scale(1.5);
+            box-shadow: 0 0 10px currentColor;
+        }
+        .home-content { position: relative; z-index: 1; text-align: center; color: white; padding: 30px 20px; }
+        .home-content h1 { font-size: 48px; margin-bottom: 20px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .home-content p { font-size: 20px; margin-bottom: 40px; opacity: 0.9; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1000px; margin-top: 30px; }
+        .menu-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .menu-card:hover { background: rgba(255,255,255,0.15); transform: translateY(-5px); }
+        .menu-card i { font-size: 48px; margin-bottom: 15px; }
+        .menu-card h3 { font-size: 22px; margin-bottom: 10px; }
+        .menu-card p { font-size: 14px; opacity: 0.8; }
+        
+        .module-page { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; }
+        .module-page h2 { font-size: 36px; margin-bottom: 30px; text-align: center; }
+        .module-content {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+        .feature-list { list-style: none; margin: 30px 0; }
+        .feature-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+        .feature-list li::before {
+            content: '✓';
+            color: #00d4ff;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .status {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .status .icon { font-size: 32px; margin-bottom: 10px; }
+        .status span { color: #00d4ff; font-weight: bold; }
+        
+        .process-section {
+            margin-top: 60px;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .process-section h2 { font-size: 28px; margin-bottom: 30px; }
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .process-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .process-card:hover { transform: translateY(-5px); border-color: rgba(0, 212, 255, 0.3); }
+        .process-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+        .process-card .card-content {
+            padding: 20px;
+            text-align: center;
+        }
+        .process-card .step {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 30px;
+            margin-bottom: 10px;
+        }
+        .process-card h4 { font-size: 18px; margin-bottom: 8px; }
+        .process-card p { font-size: 13px; opacity: 0.7; }
+        .process-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00d4ff;
+            font-size: 24px;
+            padding: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .home-content h1 { font-size: 32px; }
+            .home-content p { font-size: 16px; }
+            .menu-grid { gap: 15px; }
+            .menu-card { padding: 20px; }
+            .menu-card h3 { font-size: 18px; }
+            .process-section { padding: 20px; margin-top: 40px; }
+            .process-section h2 { font-size: 22px; }
+            .process-grid { gap: 15px; }
+            .process-card img { height: 140px; }
+            .process-card .card-content { padding: 15px; }
+            .module-page h2 { font-size: 26px; }
+            .module-content { padding: 25px; }
+            .feature-list li { font-size: 16px; }
+            .btn { padding: 10px 20px; font-size: 14px; }
+        }
+        
+        @media (max-width: 480px) {
+            .page { padding: 20px 10px; }
+            .home-content h1 { font-size: 28px; }
+            .home-content p { font-size: 14px; }
+            .process-card img { height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="home-page" class="page active">
+        <div class="poster-container">
+            <img src="海报_70.jpg" alt="智善康厨海报" class="poster-img">
+            <div class="hotspot-btn scan" onclick="showPage('scan-page')"></div>
+            <div class="hotspot-btn cook" onclick="showPage('cook-page')"></div>
+            <div class="hotspot-btn delivery" onclick="showPage('delivery-page')"></div>
+        </div>
+        <div class="home-content">
+            <h1>智善康厨</h1>
+            <p>智能烹饪小程序</p>
+            <div class="menu-grid">
+                <div class="menu-card" onclick="showPage('scan-page')">
+                    <div style="color:#00d4ff;">🔍</div>
+                    <h3>体征智能扫描</h3>
+                    <p>识别状态定制食谱</p>
+                </div>
+                <div class="menu-card" onclick="showPage('cook-page')">
+                    <div style="color:#ff6b6b;">👨‍🍳</div>
+                    <h3>自动烹饪料理</h3>
+                    <p>切配翻炒自动完成</p>
+                </div>
+                <div class="menu-card" onclick="showPage('delivery-page')">
+                    <div style="color:#4ecdc4;">🚀</div>
+                    <h3>两栖智能送餐</h3>
+                    <p>多场景灵活配送</p>
+                </div>
+            </div>
+            <button class="btn" style="margin-top:30px;" onclick="showPage('home-page')">刷新首页</button>
+            
+            <div class="process-section">
+                <h2>🍳 智能烹饪流程</h2>
+                <div class="process-grid">
+                    <div class="process-card">
+                        <img src="images/storage.png" alt="储鲜舱">
+                        <div class="card-content">
+                            <div class="step">1</div>
+                            <h4>储鲜舱</h4>
+                            <p>智能温控保鲜，新鲜食材随时取用</p>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <img src="images/cutting.png" alt="切菜">
+                        <div class="card-content">
+                            <div class="step">2</div>
+                            <h4>智能切配</h4>
+                            <p>机械臂精准切割，自动完成食材准备</p>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <img src="images/preprocessing.png" alt="食材预处理">
+                        <div class="card-content">
+                            <div class="step">3</div>
+                            <h4>食材预处理</h4>
+                            <p>清洗分拣调味，全流程自动化处理</p>
+                        </div>
+                    </div>
+                    <div class="process-card">
+                        <img src="images/delivery.png" alt="送餐">
+                        <div class="card-content">
+                            <div class="step">4</div>
+                            <h4>两栖送餐</h4>
+                            <p>地面轨道+空中配送，多场景灵活送达</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scan-page" class="page module-page">
+        <h2>体征智能扫描</h2>
+        <div class="module-content">
+            <ul class="feature-list">
+                <li>多模态扫描识别健康状态</li>
+                <li>自动匹配每日营养需求</li>
+                <li>生成专属定制健康食谱</li>
+            </ul>
+            <div class="status">
+                <div class="icon">✅</div>
+                <span>扫描模块就绪，等待启动</span>
+            </div>
+            <button class="btn back" style="margin-top:30px;width:100%;" onclick="showPage('home-page')">返回首页</button>
+        </div>
+    </div>
+
+    <div id="cook-page" class="page module-page">
+        <h2>自动烹饪料理</h2>
+        <div class="module-content">
+            <ul class="feature-list">
+                <li>机械臂自动完成食材切配</li>
+                <li>精准控温，支持翻炒颠勺动作</li>
+                <li>全流程无需手动触屏操作</li>
+            </ul>
+            <div class="status">
+                <div class="icon">✅</div>
+                <span>烹饪单元待机，可启动程序</span>
+            </div>
+            <button class="btn back" style="margin-top:30px;width:100%;" onclick="showPage('home-page')">返回首页</button>
+        </div>
+    </div>
+
+    <div id="delivery-page" class="page module-page">
+        <h2>两栖智能送餐</h2>
+        <div class="module-content">
+            <ul class="feature-list">
+                <li>适配地面、桌面多场景配送</li>
+                <li>自动规划路径，避开障碍物</li>
+                <li>烹饪完成后自动发起送餐</li>
+            </ul>
+            <div class="status">
+                <div class="icon">✅</div>
+                <span>送餐机待命，电量充足</span>
+            </div>
+            <button class="btn back" style="margin-top:30px;width:100%;" onclick="showPage('home-page')">返回首页</button>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>智善康厨</title>
     <style>
