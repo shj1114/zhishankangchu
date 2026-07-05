@@ -37,7 +37,7 @@
         .params-section h2 { font-size: 20px; margin-bottom: 15px; text-align: center; }
         .params-card { background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; cursor: pointer; transition: transform 0.3s; }
         .params-card:hover { transform: translateY(-3px); }
-        .params-card img { width: 100%; height: 120px; object-fit: cover; }
+        .params-card-image { width: 100%; height: 120px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,153,204,0.1)); }
         .params-card .card-content { padding: 15px; text-align: center; }
         .params-card h4 { font-size: 18px; margin-bottom: 5px; color: #00d4ff; }
         .params-card p { font-size: 12px; opacity: 0.7; }
@@ -132,7 +132,9 @@
             <div class="params-section">
                 <h2>📋 产品参数</h2>
                 <div class="params-card" onclick="showPage('params-page')">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMzAwIDIwMCI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiMwMGRkZmYiLz48dGV4dCB4PSIxNTAiIHk9IjEwMCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYWheiIgZm9udC1zaXplPSIyNCIgZmlsbD0ibm9uZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+RfjwvdGV4dD48dGV4dCB4PSIxNTAiIHk9IjEzMCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYWheiIgZm9udC1zaXplPSIxNiIgZmlsbD0ibm9uZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+5Lq65ZCN5Ye65ZWGPC90ZXh0Pjwvc3ZnPg==" alt="参数">
+                    <div class="params-card-image">
+                        <div style="font-size:48px;">📋</div>
+                    </div>
                     <div class="card-content">
                         <h4>查看详细参数</h4>
                         <p>整机尺寸、功率、材料等核心参数</p>
