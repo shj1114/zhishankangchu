@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智善康厨</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#0a0a1a,#1a1a3a);color:#fff;min-height:100vh}
+        .page{display:none;min-height:100vh;padding:20px;animation:fadeIn .3s}
+        .page.active{display:flex;flex-direction:column;align-items:center}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .btn{padding:12px 36px;border:none;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s;background:linear-gradient(135deg,#00d4ff,#0099cc);color:#fff;margin-top:20px;box-shadow:0 4px 15px rgba(0,212,255,.3)}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,212,255,.5)}
+        .btn.back{background:linear-gradient(135deg,#4a4a6a,#3a3a5a);box-shadow:0 4px 15px rgba(0,0,0,.3)}
+        #home-page{padding-top:50px}
+        .logo{width:100px;height:100px;margin-bottom:20px;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(0,153,204,.1));border-radius:25px;display:flex;align-items:center;justify-content:center;border:2px solid rgba(0,212,255,.3)}
+        .logo span{font-size:45px}
+        h1{font-size:32px;margin-bottom:8px;background:linear-gradient(135deg,#00d4ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .subtitle{font-size:15px;opacity:.6;margin-bottom:30px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;width:100%;max-width:600px}
+        .card{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:22px;text-align:center;transition:all .3s;cursor:pointer}
+        .card:hover{background:rgba(255,255,255,.08);transform:translateY(-3px);border-color:rgba(0,212,255,.3)}
+        .icon{font-size:36px;margin-bottom:12px}
+        .card h3{font-size:17px;margin-bottom:6px}
+        .card p{font-size:13px;opacity:.5}
+        .process-box{margin-top:35px;padding:25px;background:rgba(255,255,255,.03);border-radius:18px;width:100%;max-width:600px;border:1px solid rgba(255,255,255,.05)}
+        .process-box h2{font-size:19px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+        .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+        .step{background:rgba(255,255,255,.05);border-radius:12px;padding:12px 5px;text-align:center}
+        .step .num{width:28px;height:28px;margin:0 auto 8px;background:linear-gradient(135deg,#00d4ff,#0099cc);border-radius:50%;font-size:13px;font-weight:bold;line-height:28px}
+        .step h4{font-size:12px;margin-bottom:4px}
+        .step p{font-size:9px;opacity:.4}
+        .module-page h2{font-size:26px;margin-bottom:25px}
+        .module-box{background:rgba(255,255,255,.03);border-radius:18px;padding:25px;width:100%;max-width:500px;border:1px solid rgba(255,255,255,.05)}
+        ul{list-style:none;margin:20px 0}
+        li{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:15px;display:flex;align-items:center;gap:10px}
+        li::before{content:'✓';color:#00d4ff;font-weight:bold}
+        .status{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:12px;padding:18px;text-align:center;margin-top:18px}
+        .status span{color:#00d4ff;font-weight:600}
+        @media(max-width:480px){.page{padding:15px}h1{font-size:26px}.logo{width:80px;height:80px}.logo span{font-size:36px}.process-grid{grid-template-columns:repeat(2,1fr);gap:10px}.step{padding:15px}}
+    </style>
+</head>
+<body>
+    <div id="home-page" class="page active">
+        <div class="logo"><span>🍳</span></div>
+        <h1>智善康厨</h1>
+        <p class="subtitle">智能烹饪小程序</p>
+        <div class="grid">
+            <div class="card" onclick="show('scan-page')"><div class="icon">🔍</div><h3>体征智能扫描</h3><p>识别状态定制食谱</p></div>
+            <div class="card" onclick="show('cook-page')"><div class="icon">👨‍🍳</div><h3>自动烹饪料理</h3><p>切配翻炒自动完成</p></div>
+            <div class="card" onclick="show('delivery-page')"><div class="icon">🚀</div><h3>两栖智能送餐</h3><p>多场景灵活配送</p></div>
+        </div>
+        <div class="process-box">
+            <h2>🍳 智能烹饪流程</h2>
+            <div class="process-grid">
+                <div class="step"><div class="num">1</div><h4>储鲜舱</h4><p>智能温控保鲜</p></div>
+                <div class="step"><div class="num">2</div><h4>智能切配</h4><p>机械臂精准切割</p></div>
+                <div class="step"><div class="num">3</div><h4>食材预处理</h4><p>清洗分拣调味</p></div>
+                <div class="step"><div class="num">4</div><h4>两栖送餐</h4><p>多场景配送</p></div>
+            </div>
+        </div>
+    </div>
+    <div id="scan-page" class="page module-page">
+        <h2>体征智能扫描</h2>
+        <div class="module-box">
+            <ul>
+                <li>多模态扫描识别健康状态</li>
+                <li>自动匹配每日营养需求</li>
+                <li>生成专属定制健康食谱</li>
+            </ul>
+            <div class="status"><span>✅ 扫描模块就绪，等待启动</span></div>
+            <button class="btn back" onclick="show('home-page')">返回首页</button>
+        </div>
+    </div>
+    <div id="cook-page" class="page module-page">
+        <h2>自动烹饪料理</h2>
+        <div class="module-box">
+            <ul>
+                <li>机械臂自动完成食材切配</li>
+                <li>精准控温，支持翻炒颠勺动作</li>
+                <li>全流程无需手动触屏操作</li>
+            </ul>
+            <div class="status"><span>✅ 烹饪单元待机，可启动程序</span></div>
+            <button class="btn back" onclick="show('home-page')">返回首页</button>
+        </div>
+    </div>
+    <div id="delivery-page" class="page module-page">
+        <h2>两栖智能送餐</h2>
+        <div class="module-box">
+            <ul>
+                <li>适配地面、桌面多场景配送</li>
+                <li>自动规划路径，避开障碍物</li>
+                <li>烹饪完成后自动发起送餐</li>
+            </ul>
+            <div class="status"><span>✅ 送餐机待命，电量充足</span></div>
+            <button class="btn back" onclick="show('home-page')">返回首页</button>
+        </div>
+    </div>
+    <script>function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}</script>
+</body>
+</html>
